@@ -29,7 +29,6 @@ public class GameBoard extends JFrame implements ActionListener {
             panel.add(button.getjButton());
             button.jButton.addActionListener(this);
         }
-
         frame.add(panel);
         frame.setVisible(true);
         frame.setSize(500, 500);
@@ -90,19 +89,34 @@ public class GameBoard extends JFrame implements ActionListener {
         System.out.println(emptyButton.getRow());
         System.out.println(pressedButton.getCol());
         System.out.println(pressedButton.getRow());
-        System.out.println("hello");
-        System.out.println("testing");
-        System.out.println("test");
+
 
         if(((pressedButton.getCol() == emptyButton.getCol()) && (pressedButton.getRow() == emptyButton.getRow()+1 || pressedButton.getRow() == emptyButton.getRow()-1))
             || (pressedButton.getRow() == emptyButton.getRow()) && (pressedButton.getCol() == emptyButton.getCol()+1 || pressedButton.getCol() == emptyButton.getCol()-1)){
-
             System.out.println("Rätt knapp");
 
+            String temp = pressedButton.jButton.getText();
+            pressedButton.jButton.setText(emptyButton.jButton.getText());
+            emptyButton.jButton.setText(temp);
+
+            if(checkWinCondition()){
+                System.out.println("Du vann!");
+            }
 
         }
-        else
+        else {
             System.out.println("Fel knapp");
         }
     }
+
+    public boolean checkWinCondition(){
+        return buttonList.get(0).jButton.getText().equals("1") && buttonList.get(1).jButton.getText().equals("2") && buttonList.get(2).jButton.getText().equals("3") &&
+            buttonList.get(3).jButton.getText().equals("4") && buttonList.get(4).jButton.getText().equals("5") && buttonList.get(5).jButton.getText().equals("6") &&
+            buttonList.get(6).jButton.getText().equals("7") && buttonList.get(7).jButton.getText().equals("8") && buttonList.get(8).jButton.getText().equals("9") &&
+            buttonList.get(9).jButton.getText().equals("10") && buttonList.get(10).jButton.getText().equals("11") && buttonList.get(11).jButton.getText().equals("12") &&
+            buttonList.get(12).jButton.getText().equals("13") && buttonList.get(13).jButton.getText().equals("14") && buttonList.get(14).jButton.getText().equals("15") &&
+            buttonList.get(15).jButton.getText().equals("");
+
+    }
+}
 

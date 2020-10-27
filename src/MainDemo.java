@@ -7,6 +7,6 @@
  */
 public class MainDemo {
     public static void main(String[] args) {
-        GameBoard gameBoard = new GameBoard();
+        Game gameBoard = new Game();
     }
 }

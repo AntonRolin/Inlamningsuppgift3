@@ -14,26 +14,57 @@ import java.util.List;
  * Project: Inlamningsuppgift_3
  * Copyright: MIT
  */
-public class GameBoard extends JFrame implements ActionListener {
+public class Game extends JFrame implements ActionListener {
     int rows = 4;
     int cols = 4;
+    boolean cheatModeEnabled;
     List<Button> buttonList;
+    JFrame frame = new JFrame();
+    JPanel mainPanel;
+    JPanel gridPanel;
 
-    GameBoard(){
-        JFrame frame = new JFrame();
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(rows,cols));
+    Game(){
 
-        buttonList = scrambleButtons(rows, cols);
-        for (Button button: buttonList) {
-            panel.add(button.getjButton());
-            button.jButton.addActionListener(this);
-        }
-        frame.add(panel);
+        restartGame();
+    }
+
+    private void restartGame()
+    {
+        mainPanel = new JPanel();
+        gridPanel = new JPanel();
+
+        mainPanel.setLayout(new BorderLayout());
+        gridPanel.setLayout(new GridLayout(rows,cols));
+        mainPanel.add(BorderLayout.CENTER, gridPanel);
+
+        JPanel menuPanel = new JPanel();
+        menuPanel.setLayout(new FlowLayout());
+        JButton scrambleButton = new JButton ("Nytt spel");
+        JButton cheatButton = new JButton("Ändra svårighetsgrad");
+        cheatButton.addActionListener(this);
+        scrambleButton.addActionListener(this);
+        menuPanel.add(scrambleButton);
+        menuPanel.add(cheatButton);
+        mainPanel.add(BorderLayout.NORTH, menuPanel);
+
+        generateGameBoard();
+
+        frame.add(mainPanel);
         frame.setVisible(true);
+        frame.setLocation(700, 300);
         frame.setSize(500, 500);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
     }
+
+    public void generateGameBoard(){
+        this.buttonList = scrambleButtons(rows, cols);
+        for (Button button: buttonList) {
+            gridPanel.add(button.getjButton());
+            button.jButton.addActionListener(this);
+        }
+    }
+
 
     public List<Button> scrambleButtons(int rows, int cols){
         List<Button> buttonList = new ArrayList<>();
@@ -44,7 +75,9 @@ public class GameBoard extends JFrame implements ActionListener {
             buttonList.add(new Button("" +i));
         }
         buttonList.add(new Button(""));
-        Collections.shuffle(buttonList);
+
+        if(!cheatModeEnabled)
+            Collections.shuffle(buttonList);
 
         int col = 1;
         int row = 1;
@@ -67,8 +100,17 @@ public class GameBoard extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton pressedJButton = (JButton) e.getSource();
-        String text = pressedJButton.getText();
-        System.out.println(text);
+
+        if(pressedJButton.getText().equals("Nytt spel")){
+            mainPanel.removeAll();
+            restartGame();
+            return;
+        }
+
+        if(pressedJButton.getText().equals("Ändra svårighetsgrad")){
+            this.cheatModeEnabled = !cheatModeEnabled;
+            return;
+        }
 
         Button emptyButton = null;
         Button pressedButton = null;

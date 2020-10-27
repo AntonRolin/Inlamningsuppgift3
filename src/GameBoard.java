@@ -90,6 +90,9 @@ public class GameBoard extends JFrame implements ActionListener {
         System.out.println(emptyButton.getRow());
         System.out.println(pressedButton.getCol());
         System.out.println(pressedButton.getRow());
+        System.out.println("hello");
+        System.out.println("testing");
+        System.out.println("test");
 
         if(((pressedButton.getCol() == emptyButton.getCol()) && (pressedButton.getRow() == emptyButton.getRow()+1 || pressedButton.getRow() == emptyButton.getRow()-1))
             || (pressedButton.getRow() == emptyButton.getRow()) && (pressedButton.getCol() == emptyButton.getCol()+1 || pressedButton.getCol() == emptyButton.getCol()-1)){

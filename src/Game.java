@@ -15,13 +15,13 @@ import java.util.List;
  * Copyright: MIT
  */
 public class Game extends JFrame implements ActionListener {
-    int rows = 10;
-    int cols = 10;
-    boolean cheatModeEnabled;
-    List<Button> buttonList;
-    JFrame frame = new JFrame();
-    JPanel mainPanel;
-    JPanel gridPanel;
+    private int rows = 4;
+    private int cols = 4;
+    private boolean cheatModeEnabled;
+    private List<Button> buttonList;
+    private JFrame frame = new JFrame();
+    private JPanel mainPanel;
+    private JPanel gridPanel;
 
     Game(){
 
@@ -57,7 +57,7 @@ public class Game extends JFrame implements ActionListener {
 
     }
 
-    public void generateGameBoard(){
+    private void generateGameBoard(){
         this.buttonList = scrambleButtons(rows, cols);
         for (Button button: buttonList) {
             gridPanel.add(button.getjButton());
@@ -66,7 +66,7 @@ public class Game extends JFrame implements ActionListener {
     }
 
 
-    public List<Button> scrambleButtons(int rows, int cols){
+    private List<Button> scrambleButtons(int rows, int cols){
         List<Button> buttonList = new ArrayList<>();
 
         int numOfButtons = rows*cols;
@@ -126,27 +126,29 @@ public class Game extends JFrame implements ActionListener {
             }
         }
 
+        try {
+            if (((pressedButton.getCol() == emptyButton.getCol()) && (pressedButton.getRow() == emptyButton.getRow() + 1 || pressedButton.getRow() == emptyButton.getRow() - 1))
+                    || (pressedButton.getRow() == emptyButton.getRow()) && (pressedButton.getCol() == emptyButton.getCol() + 1 || pressedButton.getCol() == emptyButton.getCol() - 1)) {
+                System.out.println("Giltig knapp");
 
-        if(((pressedButton.getCol() == emptyButton.getCol()) && (pressedButton.getRow() == emptyButton.getRow()+1 || pressedButton.getRow() == emptyButton.getRow()-1))
-            || (pressedButton.getRow() == emptyButton.getRow()) && (pressedButton.getCol() == emptyButton.getCol()+1 || pressedButton.getCol() == emptyButton.getCol()-1)){
-            System.out.println("Giltig knapp");
+                String temp = pressedButton.jButton.getText();
+                pressedButton.jButton.setText(emptyButton.jButton.getText());
+                emptyButton.jButton.setText(temp);
 
-            String temp = pressedButton.jButton.getText();
-            pressedButton.jButton.setText(emptyButton.jButton.getText());
-            emptyButton.jButton.setText(temp);
+                if (checkWinCondition()) {
+                    JOptionPane.showMessageDialog(null, "Du vann!", "Grattis!", JOptionPane.INFORMATION_MESSAGE);
+                    System.out.println("Du vann!");
+                }
 
-            if(checkWinCondition()){
-                JOptionPane.showMessageDialog(null, "Du vann!", "Grattis!", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("Du vann!");
+            } else {
+                System.out.println("Ogiltig knapp");
             }
-
-        }
-        else {
-            System.out.println("Ogiltig knapp");
+        }catch (NullPointerException exception){
+            System.out.println("Error: Knapp har värdet null");
         }
     }
 
-    public boolean checkWinCondition(){
+    private boolean checkWinCondition(){
         int i = 1;
         for (Button button: buttonList) {
             if(i == buttonList.size())

@@ -15,13 +15,13 @@ import java.util.List;
  * Copyright: MIT
  */
 public class Game extends JFrame implements ActionListener {
-    int rows = 4;
-    int cols = 4;
-    boolean cheatModeEnabled;
-    List<Button> buttonList;
-    JFrame frame = new JFrame();
-    JPanel mainPanel;
-    JPanel gridPanel;
+    private int rows = 4;
+    private int cols = 4;
+    private boolean cheatModeEnabled;
+    private List<Button> buttonList;
+    private JFrame frame = new JFrame();
+    private JPanel mainPanel;
+    private JPanel gridPanel;
 
     Game(){
 
@@ -57,7 +57,7 @@ public class Game extends JFrame implements ActionListener {
 
     }
 
-    public void generateGameBoard(){
+    private void generateGameBoard(){
         this.buttonList = scrambleButtons(rows, cols);
         for (Button button: buttonList) {
             gridPanel.add(button.getjButton());
@@ -66,7 +66,7 @@ public class Game extends JFrame implements ActionListener {
     }
 
 
-    public List<Button> scrambleButtons(int rows, int cols){
+    private List<Button> scrambleButtons(int rows, int cols){
         List<Button> buttonList = new ArrayList<>();
 
         int numOfButtons = rows*cols;
@@ -98,7 +98,7 @@ public class Game extends JFrame implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) throws NullPointerException{
         JButton pressedJButton = (JButton) e.getSource();
 
         if(pressedJButton.getText().equals("Nytt spel")){
@@ -125,40 +125,39 @@ public class Game extends JFrame implements ActionListener {
                 pressedButton = b;
             }
         }
-        System.out.println(emptyButton.jButton.getText());
-        System.out.println(pressedButton.jButton.getText());
-        System.out.println(emptyButton.getCol());
-        System.out.println(emptyButton.getRow());
-        System.out.println(pressedButton.getCol());
-        System.out.println(pressedButton.getRow());
 
+        try {
+            if (((pressedButton.getCol() == emptyButton.getCol()) && (pressedButton.getRow() == emptyButton.getRow() + 1 || pressedButton.getRow() == emptyButton.getRow() - 1))
+                    || (pressedButton.getRow() == emptyButton.getRow()) && (pressedButton.getCol() == emptyButton.getCol() + 1 || pressedButton.getCol() == emptyButton.getCol() - 1)) {
+                System.out.println("Giltig knapp");
 
-        if(((pressedButton.getCol() == emptyButton.getCol()) && (pressedButton.getRow() == emptyButton.getRow()+1 || pressedButton.getRow() == emptyButton.getRow()-1))
-            || (pressedButton.getRow() == emptyButton.getRow()) && (pressedButton.getCol() == emptyButton.getCol()+1 || pressedButton.getCol() == emptyButton.getCol()-1)){
-            System.out.println("Rätt knapp");
+                String temp = pressedButton.jButton.getText();
+                pressedButton.jButton.setText(emptyButton.jButton.getText());
+                emptyButton.jButton.setText(temp);
 
-            String temp = pressedButton.jButton.getText();
-            pressedButton.jButton.setText(emptyButton.jButton.getText());
-            emptyButton.jButton.setText(temp);
+                if (checkWinCondition()) {
+                    JOptionPane.showMessageDialog(null, "Du vann!", "Grattis!", JOptionPane.INFORMATION_MESSAGE);
+                    System.out.println("Du vann!");
+                }
 
-            if(checkWinCondition()){
-                System.out.println("Du vann!");
+            } else {
+                System.out.println("Ogiltig knapp");
             }
-
-        }
-        else {
-            System.out.println("Fel knapp");
+        }catch (NullPointerException exception){
+            System.out.println("Error: Knapp har värdet null");
         }
     }
 
-    public boolean checkWinCondition(){
-        return buttonList.get(0).jButton.getText().equals("1") && buttonList.get(1).jButton.getText().equals("2") && buttonList.get(2).jButton.getText().equals("3") &&
-            buttonList.get(3).jButton.getText().equals("4") && buttonList.get(4).jButton.getText().equals("5") && buttonList.get(5).jButton.getText().equals("6") &&
-            buttonList.get(6).jButton.getText().equals("7") && buttonList.get(7).jButton.getText().equals("8") && buttonList.get(8).jButton.getText().equals("9") &&
-            buttonList.get(9).jButton.getText().equals("10") && buttonList.get(10).jButton.getText().equals("11") && buttonList.get(11).jButton.getText().equals("12") &&
-            buttonList.get(12).jButton.getText().equals("13") && buttonList.get(13).jButton.getText().equals("14") && buttonList.get(14).jButton.getText().equals("15") &&
-            buttonList.get(15).jButton.getText().equals("");
-
+    private boolean checkWinCondition(){
+        int i = 1;
+        for (Button button: buttonList) {
+            if(i == buttonList.size())
+                return true;
+            if(!button.jButton.getText().equals(""+i))
+                return false;
+            i++;
+        }
+                return true;
     }
 }
 
